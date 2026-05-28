@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashish Babu — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --muted: #7a7a8c;
+    --accent: #00ff88;
+    --accent2: #00c4ff;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-logo { font-size: 13px; color: var(--accent); letter-spacing: 0.05em; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-prefix { font-size: 12px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+  .hero-name { font-family: var(--sans); font-size: clamp(3.5rem, 9vw, 7rem); font-weight: 800; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards; white-space: nowrap; }
+  .hero-name span { color: var(--accent); }
+  .hero-title { font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--muted); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards; }
+  .hero-desc { max-width: 600px; color: var(--text); font-size: 13px; line-height: 1.8; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease 0.8s forwards; }
+
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.6s ease 1s forwards; }
+  .tag { font-size: 11px; padding: 4px 12px; border: 1px solid var(--border2); border-radius: 2px; color: var(--muted); letter-spacing: 0.05em; }
+  .tag.green { border-color: rgba(0,255,136,0.3); color: var(--accent); }
+  .tag.blue { border-color: rgba(0,196,255,0.3); color: var(--accent2); }
+
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 1.2s forwards; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 0.75rem 1.5rem; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.2s; cursor: pointer; border: none; }
+  .btn-primary { background: var(--accent); color: #000; font-weight: 700; }
+  .btn-primary:hover { background: #00e67a; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  .hero-grid { position: absolute; right: -100px; top: 50%; transform: translateY(-50%); width: 400px; height: 400px; opacity: 0.04; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 40px 40px; border-radius: 4px; }
+
+  section { max-width: 1100px; margin: 0 auto; padding: 5rem 4rem; }
+  .section-label { font-size: 11px; color: var(--accent); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .section-title { font-family: var(--sans); font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 3rem; letter-spacing: -0.01em; }
+  .divider { height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 3rem; }
+  .stat { background: var(--bg2); padding: 1.5rem 2rem; }
+  .stat-num { font-family: var(--sans); font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+
+  /* Projects */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 1.5rem; }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .project-card.green::before { background: var(--accent); }
+  .project-card.blue::before { background: var(--accent2); }
+  .project-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+  .project-name { font-family: var(--sans); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .project-live { font-size: 10px; color: var(--accent); letter-spacing: 0.15em; padding: 3px 8px; border: 1px solid rgba(0,255,136,0.3); border-radius: 2px; white-space: nowrap; }
+  .project-live.blue { color: var(--accent2); border-color: rgba(0,196,255,0.3); }
+
+  .project-desc { color: var(--muted); font-size: 13px; line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .project-features { list-style: none; margin-bottom: 1.5rem; }
+  .project-features li { font-size: 12px; color: var(--text); padding: 0.3rem 0; padding-left: 1.2rem; position: relative; }
+  .project-features li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .stack-tag { font-size: 10px; padding: 3px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--muted); }
+
+  .project-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 2px;
+    transition: all 0.2s;
+    background: rgba(0,255,136,0.05);
+  }
+
+  .project-link:hover { background: rgba(0,255,136,0.15); border-color: var(--accent); }
+
+  .project-link.blue {
+    color: var(--accent2);
+    border-color: rgba(0,196,255,0.3);
+    background: rgba(0,196,255,0.05);
+  }
+  .project-link.blue:hover { background: rgba(0,196,255,0.15); border-color: var(--accent2); }
+
+  .project-link.ghost { color: var(--muted); border-color: var(--border2); background: transparent; }
+  .project-link.ghost:hover { color: var(--text); border-color: var(--border2); }
+
+  /* Experience */
+  .exp-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; margin-bottom: 1.5rem; }
+  .exp-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+  .exp-role { font-family: var(--sans); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .exp-company { font-size: 12px; color: var(--accent); }
+  .exp-meta { font-size: 11px; color: var(--muted); text-align: right; letter-spacing: 0.05em; }
+  .exp-badge { font-size: 10px; padding: 2px 8px; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.2); color: var(--accent); border-radius: 2px; margin-top: 4px; display: inline-block; }
+  .exp-list { list-style: none; }
+  .exp-list li { font-size: 12px; color: var(--muted); padding: 0.4rem 0; padding-left: 1.5rem; position: relative; line-height: 1.6; border-bottom: 1px solid var(--border); }
+  .exp-list li:last-child { border-bottom: none; }
+  .exp-list li::before { content: '//'; position: absolute; left: 0; color: var(--accent); font-size: 10px; }
+  .highlight { color: var(--text); }
+
+  /* Skills */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .skill-group { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+  .skill-group-title { font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+  .skill-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-item { font-size: 11px; padding: 4px 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; color: var(--text); }
+
+  /* Contact */
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .contact-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.2s; display: flex; align-items: center; gap: 1rem; overflow: hidden; }
+  .contact-card:hover { border-color: var(--accent); transform: translateY(-2px); color: var(--accent); }
+  .contact-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .contact-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
+  .contact-value { font-size: 11px; word-break: break-all; }
+
+  footer { text-align: center; padding: 3rem; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .cursor::after { content: '_'; animation: blink 1s step-end infinite; color: var(--accent); }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  @media (max-width: 900px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .hero-name { white-space: normal; font-size: clamp(2.5rem, 10vw, 5rem); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { gap: 1rem; }
+    .hero { padding: 5rem 1.5rem 3rem; }
+    section { padding: 3rem 1.5rem; }
+    .hero-grid { display: none; }
+    .exp-meta { text-align: left; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">~/ashish-babu $<span class="cursor"></span></div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <p class="hero-prefix">// backend engineer · distributed systems · ai integration</p>
+  <h1 class="hero-name"><span>Ashish Babu</span></h1>
+  <p class="hero-title">Building scalable systems at the intersection of backend engineering and AI</p>
+  <p class="hero-desc">
+    3 years building production-grade distributed systems at SuperOps.ai (Series C, $54M) — serving 1,000+ enterprise clients globally.
+    Shipping AI-powered applications using RAG pipelines, vector embeddings, and LLMs.
+    Based in Chennai. Immediate joiner.
+  </p>
+  <div class="hero-tags">
+    <span class="tag green">✓ Immediate Joiner</span>
+    <span class="tag green">✓ Open to Remote</span>
+    <span class="tag blue">Kotlin · Java · Spring Boot</span>
+    <span class="tag blue">PostgreSQL · Redis · Kafka</span>
+    <span class="tag blue">RAG · pgvector · LLMs</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects →</a>
+    <a href="https://linkedin.com/in/ashish-babu-z" target="_blank" class="btn btn-outline">LinkedIn ↗</a>
+    <a href="https://github.com/ashish-babu-03" target="_blank" class="btn btn-outline">GitHub ↗</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<section id="about">
+  <p class="section-label">// by the numbers</p>
+  <h2 class="section-title">Impact at Scale</h2>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years of experience</div></div>
+    <div class="stat"><div class="stat-num">1,000+</div><div class="stat-label">Enterprise clients served</div></div>
+    <div class="stat"><div class="stat-num">1,500+</div><div class="stat-label">Invoices generated / month</div></div>
+    <div class="stat"><div class="stat-num">90%</div><div class="stat-label">API latency reduction</div></div>
+    <div class="stat"><div class="stat-num">20K+</div><div class="stat-label">Records processed / run</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Post-release bugs on SSO</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="projects">
+  <p class="section-label">// personal projects</p>
+  <h2 class="section-title">What I've Built</h2>
+  <div class="projects-grid">
+
+    <div class="project-card green">
+      <div class="project-header">
+        <div>
+          <div class="project-name">ProximaHire</div>
+          <div style="font-size:11px; color: var(--muted);">RAG-powered semantic job matching</div>
+        </div>
+        <span class="project-live">● LIVE</span>
+      </div>
+      <p class="project-desc">Eliminates the ATS keyword problem by matching resumes to jobs using vector embeddings and cosine similarity — not keywords. Built a full RAG pipeline from PDF parsing to LLM gap analysis.</p>
+      <ul class="project-features">
+        <li>PDF resume parsing via Apache PDFBox</li>
+        <li>384-dim vector embeddings via HuggingFace (all-MiniLM-L6-v2)</li>
+        <li>Cosine similarity search using pgvector on 60+ job listings</li>
+        <li>LLM gap analysis via OpenRouter — identifies missing skills</li>
+        <li>Dual provider — Ollama locally, HuggingFace + OpenRouter in prod</li>
+      </ul>
+      <div class="project-stack">
+        <span class="stack-tag">Kotlin</span>
+        <span class="stack-tag">Spring Boot 3.3.5</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">pgvector</span>
+        <span class="stack-tag">HuggingFace</span>
+        <span class="stack-tag">OpenRouter</span>
+        <span class="stack-tag">Docker</span>
+        <span class="stack-tag">RAG</span>
+      </div>
+      <div class="project-links">
+        <a href="https://proximahire.onrender.com" target="_blank" class="project-link">↗ Live Demo</a>
+        <a href="https://github.com/ashish-babu-03" target="_blank" class="project-link ghost">⌥ GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card blue">
+      <div class="project-header">
+        <div>
+          <div class="project-name">Reverix 2.0</div>
+          <div style="font-size:11px; color: var(--muted);">AI-powered mood-based movie booking</div>
+        </div>
+        <span class="project-live blue">● LIVE</span>
+      </div>
+      <p class="project-desc">Full-stack movie booking platform with AI chatbot, atomic Redis seat locking, and hexagonal architecture. Rebuilt from scratch after identifying structural limitations in v1.</p>
+      <ul class="project-features">
+        <li>Hexagonal architecture — pure domain layer, zero framework deps</li>
+        <li>Atomic Redis seat locking with 10-min TTL via NX command</li>
+        <li>Idempotency key guard on every booking transaction</li>
+        <li>RevBot AI chatbot — Llama 3.3 70B via WebSocket/STOMP</li>
+        <li>Resilience4j circuit breaker with fallback on all external calls</li>
+      </ul>
+      <div class="project-stack">
+        <span class="stack-tag">Kotlin</span>
+        <span class="stack-tag">Spring Boot 3.2</span>
+        <span class="stack-tag">Redis</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">Llama 3.3 70B</span>
+        <span class="stack-tag">WebSocket</span>
+        <span class="stack-tag">Resilience4j</span>
+        <span class="stack-tag">Liquibase</span>
+      </div>
+      <div class="project-links">
+        <a href="https://reverix-2-0.onrender.com" target="_blank" class="project-link blue">↗ Live Demo</a>
+        <a href="https://github.com/ashish-babu-03" target="_blank" class="project-link ghost">⌥ GitHub</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="experience">
+  <p class="section-label">// work history</p>
+  <h2 class="section-title">Experience</h2>
+
+  <div class="exp-card">
+    <div class="exp-header">
+      <div>
+        <div class="exp-role">Software Engineer — Backend Engineering</div>
+        <div class="exp-company">SuperOps.ai · Series C · $54M Funded · 1,000+ MSP Clients</div>
+        <span class="exp-badge">Full Time</span>
+      </div>
+      <div class="exp-meta">Jun 2024 – Mar 2026<br>Chennai, India</div>
+    </div>
+    <ul class="exp-list">
+      <li><span class="highlight">Performance:</span> Reduced API response time by 90%+ via APM profiling on Coralogix — eliminated N+1 feature gate cache calls, refactored to single cached object per request lifecycle.</li>
+      <li><span class="highlight">Billing Pipeline:</span> Sole owner of end-to-end monthly billing system generating 1,500+ invoices/cycle for 500–1,000+ clients. Data modelling, invoice generation, RBAC, audit logging, AWS S3 archival. Zero regressions.</li>
+      <li><span class="highlight">SSO (SAML 2.0):</span> Solo 3-week delivery of most-requested enterprise feature — multi-tenant per-client IDP configuration for 1,000+ MSP tenants. Dual-write migration, 2× test coverage. Zero post-release bugs.</li>
+      <li><span class="highlight">Bulk Action Engine:</span> Filter-aware, queue-backed batched engine supporting 20,000+ records/run via Apache Pulsar. Reduced operation time by 90%. Adopted platform-wide.</li>
+      <li><span class="highlight">Revenue Bug:</span> Caught silent billing defect causing undetected revenue leakage across 500–1,000+ accounts before any client reported it. Traced and resolved independently.</li>
+    </ul>
+  </div>
+
+  <div class="exp-card">
+    <div class="exp-header">
+      <div>
+        <div class="exp-role">Software Engineering Intern — Backend</div>
+        <div class="exp-company">SuperOps.ai · Promoted to full-time in 12 months</div>
+        <span class="exp-badge">Intern → FTE</span>
+      </div>
+      <div class="exp-meta">Jun 2023 – Jun 2024<br>Chennai, India</div>
+    </div>
+    <ul class="exp-list">
+      <li>Built internal bulk-update tool for 3,000+ assets/client — reduced multi-day manual onboarding to minutes.</li>
+      <li>Introduced Redis caching layer on high-frequency endpoints — improved response consistency under concurrent traffic across 1,000+ clients.</li>
+      <li>Built async event pipeline via Apache Pulsar streaming user events to Mixpanel for real-time product analytics.</li>
+      <li>Built pluggable adapter architecture for 6+ third-party integrations — fault-tolerant, retry-backed. Pattern adopted team-wide.</li>
+      <li>Extended patch system from Windows/macOS to Linux across a 375,000+ patch platform.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="skills">
+  <p class="section-label">// technical stack</p>
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">Languages</div>
+      <div class="skill-items"><span class="skill-item">Kotlin</span><span class="skill-item">Java</span><span class="skill-item">SQL</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Frameworks</div>
+      <div class="skill-items"><span class="skill-item">Spring Boot</span><span class="skill-item">Spring Security</span><span class="skill-item">Spring WebFlux</span><span class="skill-item">JPA / JOOQ</span><span class="skill-item">Hibernate</span><span class="skill-item">GraphQL</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Databases</div>
+      <div class="skill-items"><span class="skill-item">PostgreSQL</span><span class="skill-item">MySQL</span><span class="skill-item">Redis</span><span class="skill-item">pgvector</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">AI & LLM</div>
+      <div class="skill-items"><span class="skill-item">RAG Pipelines</span><span class="skill-item">Vector Embeddings</span><span class="skill-item">HuggingFace</span><span class="skill-item">OpenRouter</span><span class="skill-item">Llama 3.3 70B</span><span class="skill-item">Prompt Engineering</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Messaging & Async</div>
+      <div class="skill-items"><span class="skill-item">Apache Pulsar</span><span class="skill-item">Kafka</span><span class="skill-item">WebSocket/STOMP</span><span class="skill-item">Avro</span><span class="skill-item">Event-Driven</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Cloud & DevOps</div>
+      <div class="skill-items"><span class="skill-item">AWS S3</span><span class="skill-item">Docker</span><span class="skill-item">Jenkins</span><span class="skill-item">Git</span><span class="skill-item">Liquibase</span><span class="skill-item">Gradle</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Auth & Security</div>
+      <div class="skill-items"><span class="skill-item">SAML 2.0</span><span class="skill-item">OAuth 2.0</span><span class="skill-item">JWT</span><span class="skill-item">RBAC</span><span class="skill-item">AES-256</span><span class="skill-item">TOTP</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Architecture</div>
+      <div class="skill-items"><span class="skill-item">Hexagonal</span><span class="skill-item">Microservices</span><span class="skill-item">Resilience4j</span><span class="skill-item">Idempotency</span><span class="skill-item">Circuit Breaker</span></div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Observability</div>
+      <div class="skill-items"><span class="skill-item">Coralogix</span><span class="skill-item">APM Profiling</span><span class="skill-item">Slack Alerting</span><span class="skill-item">Spring Events</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contact">
+  <p class="section-label">// get in touch</p>
+  <h2 class="section-title">Let's Connect</h2>
+  <p style="color: var(--muted); margin-bottom: 2rem; max-width: 500px; font-size: 13px;">
+    Open to backend engineering roles in Chennai or remote. Immediate joiner. Let's build something great together.
+  </p>
+  <div class="contact-grid">
+    <a href="mailto:ashish.babu.sde@gmail.com" class="contact-card">
+      <span class="contact-icon">✉</span>
+      <div style="min-width: 0;">
+        <div class="contact-label">Email</div>
+        <div class="contact-value">ashish.babu.sde@gmail.com</div>
+      </div>
+    </a>
+    <a href="https://linkedin.com/in/ashish-babu-z" target="_blank" class="contact-card">
+      <span class="contact-icon">in</span>
+      <div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">ashish-babu-z</div>
+      </div>
+    </a>
+    <a href="https://github.com/ashish-babu-03" target="_blank" class="contact-card">
+      <span class="contact-icon">⌥</span>
+      <div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">ashish-babu-03</div>
+      </div>
+    </a>
+    <a href="https://proximahire.onrender.com" target="_blank" class="contact-card">
+      <span class="contact-icon">↗</span>
+      <div>
+        <div class="contact-label">Live Project</div>
+        <div class="contact-value">ProximaHire</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Built by Ashish Babu · ashish-babu-03.github.io · Chennai, India</p>
+</footer>
+
+</body>
+</html>
